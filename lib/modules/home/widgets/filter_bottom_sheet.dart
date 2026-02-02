@@ -11,8 +11,8 @@ class FilterBottomSheet extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(24.0),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
@@ -53,9 +53,11 @@ class FilterBottomSheet extends GetView<HomeController> {
                   onSelected: (selected) {
                     controller.setFilterStatus(selected ? status : null);
                   },
-                  selectedColor: Colors.deepPurple.shade100,
+                  selectedColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                   labelStyle: TextStyle(
-                    color: isSelected ? Colors.deepPurple : Colors.black87,
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).textTheme.bodyMedium?.color,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 );
@@ -78,9 +80,11 @@ class FilterBottomSheet extends GetView<HomeController> {
                   onSelected: (selected) {
                     controller.setFilterPriority(selected ? priority : null);
                   },
-                  selectedColor: Colors.deepPurple.shade100,
+                  selectedColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                   labelStyle: TextStyle(
-                    color: isSelected ? Colors.deepPurple : Colors.black87,
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).textTheme.bodyMedium?.color,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 );
@@ -94,7 +98,10 @@ class FilterBottomSheet extends GetView<HomeController> {
           const SizedBox(height: 8),
           Obx(() {
             if (controller.availableCategories.isEmpty) {
-              return const Text('No categories available', style: TextStyle(color: Colors.grey));
+              return Text(
+                'No categories available',
+                style: TextStyle(color: Theme.of(context).disabledColor),
+              );
             }
             return Wrap(
               spacing: 8,
@@ -109,10 +116,12 @@ class FilterBottomSheet extends GetView<HomeController> {
                   selectedColor: Color(category.color),
                   checkmarkColor: Colors.white,
                   labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black87,
+                    color: isSelected
+                        ? Colors.white
+                        : Theme.of(context).textTheme.bodyMedium?.color,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
-                  backgroundColor: Colors.grey.shade100,
+                  backgroundColor: Theme.of(context).cardTheme.color,
                 );
               }).toList(),
             );
@@ -124,8 +133,8 @@ class FilterBottomSheet extends GetView<HomeController> {
             child: ElevatedButton(
               onPressed: () => Get.back(),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).primaryColor,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),

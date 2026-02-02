@@ -37,7 +37,7 @@ class TaskItemWidget extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey.shade200),
+        side: BorderSide(color: Theme.of(context).dividerColor),
       ),
       child: InkWell(
         onTap: () => onTap?.call(task.id),
@@ -79,7 +79,9 @@ class TaskItemWidget extends StatelessWidget {
                         decoration: task.status == TaskStatus.completed
                             ? TextDecoration.lineThrough
                             : null,
-                        color: task.status == TaskStatus.completed ? Colors.grey : Colors.black87,
+                        color: task.status == TaskStatus.completed
+                            ? Theme.of(context).disabledColor
+                            : Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -88,11 +90,18 @@ class TaskItemWidget extends StatelessWidget {
                     if (task.dueDate != null)
                       Row(
                         children: [
-                          Icon(Icons.access_time, size: 14, color: Colors.grey.shade600),
+                          Icon(
+                            Icons.access_time,
+                            size: 14,
+                            color: Theme.of(context).textTheme.bodySmall?.color,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             DateFormat('hh:mm a').format(task.dueDate!),
-                            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).textTheme.bodySmall?.color,
+                            ),
                           ),
                         ],
                       ),
@@ -104,7 +113,9 @@ class TaskItemWidget extends StatelessWidget {
                 task.status == TaskStatus.completed
                     ? Icons.check_circle
                     : Icons.radio_button_unchecked,
-                color: task.status == TaskStatus.completed ? Colors.green : Colors.grey.shade400,
+                color: task.status == TaskStatus.completed
+                    ? Colors.green
+                    : Theme.of(context).disabledColor,
               ),
             ],
           ),

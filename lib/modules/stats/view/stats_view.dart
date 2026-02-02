@@ -9,18 +9,15 @@ class StatsView extends GetView<StatsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Or adapt to theme
+      backgroundColor: Get.theme.scaffoldBackgroundColor, // Or adapt to theme
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Get.theme.appBarTheme.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Get.theme.iconTheme.color),
           onPressed: () => Get.back(),
         ),
-        title: const Text(
-          'Statistics',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
+        title: Text('Statistics', style: Get.theme.appBarTheme.titleTextStyle),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -81,12 +78,16 @@ class StatsView extends GetView<StatsController> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Get.theme.cardTheme.color,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
-          BoxShadow(color: Colors.grey.shade100, blurRadius: 10, offset: const Offset(0, 4)),
+          BoxShadow(
+            color: Get.theme.shadowColor.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
         ],
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: Get.theme.dividerColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,10 +101,10 @@ class StatsView extends GetView<StatsController> {
           Obx(
             () => Text(
               '${valueObx.value}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: Get.theme.textTheme.bodyLarge?.color,
               ),
             ),
           ),
@@ -111,7 +112,7 @@ class StatsView extends GetView<StatsController> {
             title,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey.shade600,
+              color: Get.theme.textTheme.bodySmall?.color,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -124,11 +125,11 @@ class StatsView extends GetView<StatsController> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.deepPurple,
+        color: Get.theme.primaryColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.deepPurple.withOpacity(0.3),
+            color: Get.theme.colorScheme.primary.withOpacity(0.3),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -141,7 +142,7 @@ class StatsView extends GetView<StatsController> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), shape: BoxShape.circle),
-            child: const Icon(Icons.category, color: Colors.white, size: 24),
+            child: Icon(Icons.category, color: Get.theme.colorScheme.onPrimary, size: 24),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,10 +150,10 @@ class StatsView extends GetView<StatsController> {
               Obx(
                 () => Text(
                   controller.topCategoryName.value,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Get.theme.colorScheme.onPrimary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -161,18 +162,22 @@ class StatsView extends GetView<StatsController> {
               Obx(
                 () => Text(
                   '${controller.topCategoryCount.value} Tasks',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white70,
+                    color: Get.theme.colorScheme.onPrimary.withOpacity(0.7),
                   ),
                 ),
               ),
             ],
           ),
-          const Text(
+          Text(
             'Top Category',
-            style: TextStyle(fontSize: 12, color: Colors.white60, fontWeight: FontWeight.w500),
+            style: TextStyle(
+              fontSize: 12,
+              color: Get.theme.colorScheme.onPrimary.withOpacity(0.6),
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),

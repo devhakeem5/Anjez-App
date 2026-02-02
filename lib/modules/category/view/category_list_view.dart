@@ -10,21 +10,18 @@ class CategoryListView extends GetView<CategoryController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Get.theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Get.theme.appBarTheme.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Get.theme.iconTheme.color),
           onPressed: () => Get.back(),
         ),
-        title: const Text(
-          'Manage Categories',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
+        title: Text('Manage Categories', style: Get.theme.appBarTheme.titleTextStyle),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add, color: Colors.deepPurple),
+            icon: Icon(Icons.add, color: Get.theme.primaryColor),
             onPressed: () {
               Get.to(() => AddEditCategoryView());
             },
@@ -41,11 +38,11 @@ class CategoryListView extends GetView<CategoryController> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.category_outlined, size: 64, color: Colors.grey.shade300),
+                Icon(Icons.category_outlined, size: 64, color: Get.theme.disabledColor),
                 const SizedBox(height: 16),
                 Text(
                   'No categories yet',
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 16),
+                  style: TextStyle(color: Get.theme.disabledColor, fontSize: 16),
                 ),
                 TextButton(
                   onPressed: () => Get.to(() => AddEditCategoryView()),
@@ -64,12 +61,12 @@ class CategoryListView extends GetView<CategoryController> {
             final category = controller.categories[index];
             return Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Get.theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.shade200),
+                border: Border.all(color: Get.theme.dividerColor),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
+                    color: Get.theme.shadowColor.withOpacity(0.02),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -101,13 +98,15 @@ class CategoryListView extends GetView<CategoryController> {
                   category.name,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: category.isActive ? Colors.black87 : Colors.grey,
+                    color: category.isActive
+                        ? Get.theme.textTheme.bodyLarge?.color
+                        : Get.theme.disabledColor,
                     decoration: !category.isActive ? TextDecoration.lineThrough : null,
                   ),
                 ),
                 trailing: Switch(
                   value: category.isActive,
-                  activeThumbColor: Colors.deepPurple,
+                  activeThumbColor: Get.theme.primaryColor,
                   onChanged: (value) {
                     controller.toggleCategoryStatus(category);
                   },

@@ -18,8 +18,8 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: _buildAppBar(),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: _buildAppBar(context),
       body: RefreshIndicator(
         onRefresh: () async => controller.loadTasks(),
         child: SingleChildScrollView(
@@ -43,15 +43,15 @@ class HomeView extends GetView<HomeController> {
         onPressed: () {
           Get.toNamed(Routes.addTask);
         },
-        backgroundColor: Colors.deepPurple,
-        child: const Icon(Icons.add, color: Colors.white),
+        backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+        child: const Icon(Icons.add),
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       elevation: 0,
       titleSpacing: 16,
       title: Obx(() {
@@ -61,9 +61,9 @@ class HomeView extends GetView<HomeController> {
             decoration: InputDecoration(
               hintText: 'Search tasks...',
               border: InputBorder.none,
-              hintStyle: TextStyle(color: Colors.grey.shade400),
+              hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
             ),
-            style: const TextStyle(color: Colors.black87),
+            style: Theme.of(context).textTheme.bodyMedium,
             onChanged: controller.setSearchText,
           );
         }
@@ -72,17 +72,17 @@ class HomeView extends GetView<HomeController> {
           children: [
             Text(
               'Hello, ${controller.userName.value}!',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Theme.of(context).textTheme.headlineMedium?.color,
               ),
             ),
             Text(
               DateFormat('EEEE, d MMMM').format(DateTime.now()),
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey.shade600,
+                color: Theme.of(context).textTheme.bodySmall?.color,
                 fontWeight: FontWeight.normal,
               ),
             ),
@@ -93,7 +93,7 @@ class HomeView extends GetView<HomeController> {
         Obx(() {
           if (controller.isSearching.value) {
             return IconButton(
-              icon: const Icon(Icons.close, color: Colors.black),
+              icon: Icon(Icons.close, color: Theme.of(context).iconTheme.color),
               onPressed: () {
                 controller.toggleSearch();
               },
@@ -102,19 +102,19 @@ class HomeView extends GetView<HomeController> {
           return Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.search, color: Colors.black),
+                icon: Icon(Icons.search, color: Theme.of(context).iconTheme.color),
                 onPressed: () {
                   controller.toggleSearch();
                 },
               ),
               IconButton(
-                icon: const Icon(Icons.bar_chart, color: Colors.black),
+                icon: Icon(Icons.bar_chart, color: Theme.of(context).iconTheme.color),
                 onPressed: () {
                   Get.to(() => const StatsView());
                 },
               ),
               IconButton(
-                icon: const Icon(Icons.category_outlined, color: Colors.black),
+                icon: Icon(Icons.category_outlined, color: Theme.of(context).iconTheme.color),
                 onPressed: () {
                   Get.to(() => const CategoryListView());
                 },
@@ -122,7 +122,9 @@ class HomeView extends GetView<HomeController> {
               IconButton(
                 icon: Icon(
                   controller.hasActiveFilters ? Icons.filter_list_alt : Icons.filter_list,
-                  color: controller.hasActiveFilters ? Colors.deepPurple : Colors.black,
+                  color: controller.hasActiveFilters
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).iconTheme.color,
                 ),
                 onPressed: () {
                   Get.bottomSheet(const FilterBottomSheet(), isScrollControlled: true);

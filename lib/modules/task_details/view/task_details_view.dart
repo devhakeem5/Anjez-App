@@ -115,13 +115,13 @@ class TaskDetailsView extends GetView<TaskDetailsController> {
   Color _getStatusColor(TaskStatus status) {
     switch (status) {
       case TaskStatus.pending:
-        return Colors.orange;
+        return Get.theme.colorScheme.secondary;
       case TaskStatus.inProgress:
-        return Colors.blue;
+        return Get.theme.primaryColor;
       case TaskStatus.completed:
         return Colors.green;
       case TaskStatus.overdue:
-        return Colors.red;
+        return Get.theme.colorScheme.error;
     }
   }
 
@@ -217,7 +217,7 @@ class TaskDetailsView extends GetView<TaskDetailsController> {
                 onDismissed: (_) {
                   controller.deleteSubTask(subtask.id);
                 },
-                background: Container(color: Colors.red),
+                background: Container(color: Get.theme.colorScheme.error),
                 child: CheckboxListTile(
                   title: Text(
                     subtask.title,
@@ -250,7 +250,7 @@ class TaskDetailsView extends GetView<TaskDetailsController> {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.add_circle, color: Colors.blue),
+              icon: Icon(Icons.add_circle, color: Get.theme.primaryColor),
               onPressed: () => controller.addSubTask(),
             ),
           ],

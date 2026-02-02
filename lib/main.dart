@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'core/database/db_helper.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/storage_service.dart';
+import 'core/utils/theme.dart';
 import 'data/repositories/category_repository.dart';
 import 'data/repositories/subtask_repository.dart';
 import 'data/repositories/task_repository.dart';
@@ -41,23 +42,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Todo App',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        useMaterial3: true,
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.deepPurple,
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFF1E1E1E),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF1E1E1E),
-          foregroundColor: Colors.white,
-        ),
-        cardTheme: CardThemeData(color: Color(0xFF2C2C2C), surfaceTintColor: Colors.transparent),
-      ),
+      title: 'أنجز',
+      theme: lightTheme,
+      darkTheme: darkTheme,
       themeMode: ThemeMode.system, // Respect system setting
       initialBinding: InitialBinding(),
       initialRoute: initialRoute,

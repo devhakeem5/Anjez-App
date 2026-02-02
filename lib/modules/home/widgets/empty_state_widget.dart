@@ -17,11 +17,11 @@ class EmptyStateWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 48, color: Colors.grey.shade300),
+          Icon(icon, size: 48, color: Theme.of(context).disabledColor),
           const SizedBox(height: 12),
           Text(
             message,
-            style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color, fontSize: 14),
             textAlign: TextAlign.center,
           ),
         ],

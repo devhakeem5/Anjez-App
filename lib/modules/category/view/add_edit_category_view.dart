@@ -35,17 +35,17 @@ class AddEditCategoryView extends GetView<CategoryController> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Get.theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Get.theme.appBarTheme.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Get.theme.iconTheme.color),
           onPressed: () => Get.back(),
         ),
         title: Text(
           category == null ? 'New Category' : 'Edit Category',
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: Get.theme.appBarTheme.titleTextStyle,
         ),
       ),
       body: Padding(
@@ -54,17 +54,14 @@ class AddEditCategoryView extends GetView<CategoryController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Name Field
-            const Text(
-              'Category Name',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-            ),
+            Text('Category Name', style: Get.theme.textTheme.titleMedium),
             const SizedBox(height: 8),
             TextField(
               controller: nameController,
               decoration: InputDecoration(
                 hintText: 'e.g., Work, Personal',
                 filled: true,
-                fillColor: Colors.grey.shade100,
+                fillColor: Get.theme.inputDecorationTheme.fillColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -74,10 +71,7 @@ class AddEditCategoryView extends GetView<CategoryController> {
             const SizedBox(height: 24),
 
             // Color Picker
-            const Text(
-              'Category Color',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-            ),
+            Text('Category Color', style: Get.theme.textTheme.titleMedium),
             const SizedBox(height: 12),
             Obx(
               () => Wrap(
@@ -95,7 +89,9 @@ class AddEditCategoryView extends GetView<CategoryController> {
                       decoration: BoxDecoration(
                         color: color,
                         shape: BoxShape.circle,
-                        border: isSelected ? Border.all(color: Colors.black, width: 3) : null,
+                        border: isSelected
+                            ? Border.all(color: Get.theme.colorScheme.onSurface, width: 3)
+                            : null,
                         boxShadow: [
                           BoxShadow(
                             color: color.withOpacity(0.3),
@@ -135,16 +131,16 @@ class AddEditCategoryView extends GetView<CategoryController> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
+                  backgroundColor: Get.theme.primaryColor,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   elevation: 2,
                 ),
                 child: Text(
                   category == null ? 'Create Category' : 'Save Changes',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Get.theme.colorScheme.onPrimary,
                   ),
                 ),
               ),

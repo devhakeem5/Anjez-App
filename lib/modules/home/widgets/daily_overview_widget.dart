@@ -20,11 +20,11 @@ class DailyOverviewWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF2C3E50), // Dark aesthetics like requested
+        color: Theme.of(context).primaryColor, // Dark aesthetics like requested
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Theme.of(context).shadowColor.withOpacity(0.2),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -39,10 +39,10 @@ class DailyOverviewWidget extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Daily Overview',
                     style: TextStyle(
-                      color: Colors.white70,
+                      color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -61,8 +61,8 @@ class DailyOverviewWidget extends StatelessWidget {
 
                     return Text(
                       '$completed Tasks \nCompleted',
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         height: 1.2,
@@ -78,16 +78,22 @@ class DailyOverviewWidget extends StatelessWidget {
                   color: Colors.white.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.bar_chart_rounded, color: Colors.white),
+                child: Icon(
+                  Icons.bar_chart_rounded,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 16),
           // Progress Bar (Decorative or real)
           // Let's make it motivational
-          const Text(
+          Text(
             'Keep up the good work!',
-            style: TextStyle(color: Colors.white54, fontSize: 12),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.54),
+              fontSize: 12,
+            ),
           ),
         ],
       ),

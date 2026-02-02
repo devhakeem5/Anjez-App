@@ -57,9 +57,9 @@ class _NameScreen extends GetView<OnboardingController> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'What should we call you?',
-            style: TextStyle(fontSize: 18, color: Colors.grey),
+            style: TextStyle(fontSize: 18, color: Theme.of(context).textTheme.bodySmall?.color),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 48),
@@ -101,9 +101,9 @@ class _CategorySelectionScreen extends GetView<OnboardingController> {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Select categories to start with.',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+            style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodySmall?.color),
           ),
           const SizedBox(height: 32),
           Expanded(
@@ -117,10 +117,12 @@ class _CategorySelectionScreen extends GetView<OnboardingController> {
                     label: Text(category),
                     selected: isSelected,
                     onSelected: (_) => controller.toggleCategory(category),
-                    selectedColor: Colors.deepPurple.shade100,
-                    checkmarkColor: Colors.deepPurple,
+                    selectedColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    checkmarkColor: Theme.of(context).colorScheme.primary,
                     labelStyle: TextStyle(
-                      color: isSelected ? Colors.deepPurple : Colors.black87,
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).textTheme.bodyLarge?.color,
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
                   );
@@ -160,7 +162,7 @@ class _SummaryScreen extends GetView<OnboardingController> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Spacer(),
-          const Icon(Icons.check_circle_outline, size: 80, color: Colors.deepPurple),
+          Icon(Icons.check_circle_outline, size: 80, color: Theme.of(context).primaryColor),
           const SizedBox(height: 24),
           Obx(
             () => Text(
@@ -170,9 +172,9 @@ class _SummaryScreen extends GetView<OnboardingController> {
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'We have set up your workspace with the following categories:',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+            style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodySmall?.color),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
@@ -182,14 +184,19 @@ class _SummaryScreen extends GetView<OnboardingController> {
               spacing: 8,
               runSpacing: 8,
               children: controller.selectedCategories
-                  .map((c) => Chip(label: Text(c), backgroundColor: Colors.deepPurple.shade50))
+                  .map(
+                    (c) => Chip(
+                      label: Text(c),
+                      backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+                    ),
+                  )
                   .toList(),
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'You can always change this later in settings.',
-            style: TextStyle(fontSize: 12, color: Colors.grey),
+            style: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color),
             textAlign: TextAlign.center,
           ),
           const Spacer(),
@@ -200,8 +207,8 @@ class _SummaryScreen extends GetView<OnboardingController> {
               ElevatedButton(
                 onPressed: controller.completeOnboarding,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                 ),
                 child: const Text('Get Started'),

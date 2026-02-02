@@ -10,13 +10,13 @@ class AddTaskView extends GetView<AddTaskController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Get.theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('New Task', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        title: Text('New Task', style: Get.theme.appBarTheme.titleTextStyle),
+        backgroundColor: Get.theme.appBarTheme.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.black),
+          icon: Icon(Icons.close, color: Get.theme.iconTheme.color),
           onPressed: () => Get.back(),
         ),
       ),
@@ -26,8 +26,8 @@ class AddTaskView extends GetView<AddTaskController> {
           Obx(
             () => LinearProgressIndicator(
               value: (controller.currentStep.value + 1) / controller.totalSteps,
-              color: Colors.deepPurple,
-              backgroundColor: Colors.grey.shade200,
+              color: Get.theme.primaryColor,
+              backgroundColor: Get.theme.dividerColor,
             ),
           ),
 
@@ -75,11 +75,11 @@ class AddTaskView extends GetView<AddTaskController> {
           TextField(
             controller: controller.titleController,
             autofocus: true,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Enter task title',
               border: OutlineInputBorder(),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.deepPurple, width: 2),
+                borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
               ),
             ),
             style: const TextStyle(fontSize: 18),
@@ -176,9 +176,11 @@ class AddTaskView extends GetView<AddTaskController> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.deepPurple.withOpacity(0.1) : Colors.white,
+            color: isSelected
+                ? Get.theme.colorScheme.primary.withOpacity(0.1)
+                : Get.theme.cardTheme.color,
             border: Border.all(
-              color: isSelected ? Colors.deepPurple : Colors.grey.shade300,
+              color: isSelected ? Get.theme.colorScheme.primary : Get.theme.dividerColor,
               width: 2,
             ),
             borderRadius: BorderRadius.circular(12),
@@ -187,13 +189,13 @@ class AddTaskView extends GetView<AddTaskController> {
             children: [
               Icon(
                 isDate ? Icons.calendar_today : Icons.schedule,
-                color: isSelected ? Colors.deepPurple : Colors.grey,
+                color: isSelected ? Get.theme.colorScheme.primary : Get.theme.iconTheme.color,
               ),
               const SizedBox(height: 8),
               Text(
                 label,
                 style: TextStyle(
-                  color: isSelected ? Colors.deepPurple : Colors.grey,
+                  color: isSelected ? Get.theme.colorScheme.primary : Get.theme.disabledColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -215,17 +217,17 @@ class AddTaskView extends GetView<AddTaskController> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
+          border: Border.all(color: Get.theme.dividerColor),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           children: [
-            Icon(Icons.calendar_month, color: Colors.grey.shade600),
+            Icon(Icons.calendar_month, color: Get.theme.iconTheme.color),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                Text(label, style: TextStyle(fontSize: 12, color: Get.theme.disabledColor)),
                 Text(
                   selectedDate.toString().split(' ')[0], // Simple format
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -298,32 +300,38 @@ class AddTaskView extends GetView<AddTaskController> {
 
     // Helper for comparison
     bool isSelected = false;
-    if (label == 'Low' && controller.selectedPriority.value.toString().contains('low'))
+    if (label == 'Low' && controller.selectedPriority.value.toString().contains('low')) {
       isSelected = true;
-    if (label == 'Medium' && controller.selectedPriority.value.toString().contains('medium'))
+    }
+    if (label == 'Medium' && controller.selectedPriority.value.toString().contains('medium')) {
       isSelected = true;
-    if (label == 'High' && controller.selectedPriority.value.toString().contains('high'))
+    }
+    if (label == 'High' && controller.selectedPriority.value.toString().contains('high')) {
       isSelected = true;
+    }
 
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
       selectedColor: color.withOpacity(0.2),
-      labelStyle: TextStyle(color: isSelected ? color : Colors.black),
+      labelStyle: TextStyle(color: isSelected ? color : Get.theme.textTheme.bodyLarge?.color),
       onSelected: (val) {
         if (val) {
-          if (label == 'Low')
+          if (label == 'Low') {
             controller.selectedPriority.value = (TaskPriority.values.firstWhere(
               (e) => e.toString().contains('low'),
             ));
-          if (label == 'Medium')
+          }
+          if (label == 'Medium') {
             controller.selectedPriority.value = (TaskPriority.values.firstWhere(
               (e) => e.toString().contains('medium'),
             ));
-          if (label == 'High')
+          }
+          if (label == 'High') {
             controller.selectedPriority.value = (TaskPriority.values.firstWhere(
               (e) => e.toString().contains('high'),
             ));
+          }
           // Fix: TaskPriority is imported, but we need exact enum.
           // Ideally we use Enum values directly.
           // Let's assume the Enum import is visible.
@@ -366,8 +374,14 @@ class AddTaskView extends GetView<AddTaskController> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, offset: const Offset(0, -2))],
+        color: Get.theme.scaffoldBackgroundColor,
+        boxShadow: [
+          BoxShadow(
+            color: Get.theme.shadowColor.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -388,8 +402,6 @@ class AddTaskView extends GetView<AddTaskController> {
                   ? null
                   : controller.nextStep,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
