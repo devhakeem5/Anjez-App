@@ -1,0 +1,150 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../core/constants/enums.dart';
+import '../home_controller.dart';
+
+class FilterBottomSheet extends GetView<HomeController> {
+  const FilterBottomSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24.0),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Filters',
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              TextButton(
+                onPressed: () {
+                  controller.clearFilters();
+                  Get.back();
+                },
+                child: const Text('Reset'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Status Filter
+          _buildSectionTitle(context, 'Status'),
+          const SizedBox(height: 8),
+          Obx(
+            () => Wrap(
+              spacing: 8,
+              children: TaskStatus.values.map((status) {
+                final isSelected = controller.filterStatus.value == status;
+                return ChoiceChip(
+                  label: Text(_formatEnum(status.name)),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    controller.setFilterStatus(selected ? status : null);
+                  },
+                  selectedColor: Colors.deepPurple.shade100,
+                  labelStyle: TextStyle(
+                    color: isSelected ? Colors.deepPurple : Colors.black87,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Priority Filter
+          _buildSectionTitle(context, 'Priority'),
+          const SizedBox(height: 8),
+          Obx(
+            () => Wrap(
+              spacing: 8,
+              children: TaskPriority.values.map((priority) {
+                final isSelected = controller.filterPriority.value == priority;
+                return ChoiceChip(
+                  label: Text(_formatEnum(priority.name)),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    controller.setFilterPriority(selected ? priority : null);
+                  },
+                  selectedColor: Colors.deepPurple.shade100,
+                  labelStyle: TextStyle(
+                    color: isSelected ? Colors.deepPurple : Colors.black87,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Category Filter
+          _buildSectionTitle(context, 'Categories'),
+          const SizedBox(height: 8),
+          Obx(() {
+            if (controller.availableCategories.isEmpty) {
+              return const Text('No categories available', style: TextStyle(color: Colors.grey));
+            }
+            return Wrap(
+              spacing: 8,
+              children: controller.availableCategories.map((category) {
+                final isSelected = controller.filterCategoryIds.contains(category.id);
+                return FilterChip(
+                  label: Text(category.name),
+                  selected: isSelected,
+                  onSelected: (_) {
+                    controller.toggleFilterCategory(category.id);
+                  },
+                  selectedColor: Color(category.color),
+                  checkmarkColor: Colors.white,
+                  labelStyle: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black87,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                  backgroundColor: Colors.grey.shade100,
+                );
+              }).toList(),
+            );
+          }),
+          const SizedBox(height: 24),
+
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => Get.back(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurple,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: const Text('Apply Filters'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    return Text(
+      title,
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+    );
+  }
+
+  String _formatEnum(String name) {
+    return name[0].toUpperCase() + name.substring(1);
+  }
+}
