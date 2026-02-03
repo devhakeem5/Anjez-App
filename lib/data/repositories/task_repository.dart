@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../core/constants/db_constants.dart';
+import '../../core/constants/enums.dart';
 import '../../core/database/db_helper.dart';
 import '../../core/services/notification_service.dart';
 import '../models/task_model.dart';
@@ -213,5 +214,33 @@ class TaskRepository extends GetxService {
       return {row[DbConstants.colCategoryId] as String: row['count'] as int};
     }
     return {};
+  }
+
+  Future<int> countInProgress() async {
+    final db = await _dbHelper.database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM ${DbConstants.tableTasks} WHERE ${DbConstants.colStatus} = ?',
+      [TaskStatus.inProgress.name],
+    );
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  Future<int> countCompletedSubtasksRange(DateTime start, DateTime end) async {
+    final db = await _dbHelper.database;
+    final startStr = start.toIso8601String();
+    final endStr = end.toIso8601String();
+
+    final result = await db.rawQuery(
+      '''
+      SELECT COUNT(*) as count 
+      FROM ${DbConstants.tableSubtasks} s
+      INNER JOIN ${DbConstants.tableTasks} t ON s.${DbConstants.colTaskId} = t.${DbConstants.colId}
+      WHERE t.${DbConstants.colStatus} = 'completed' 
+      AND t.${DbConstants.colUpdatedAt} BETWEEN ? AND ?
+    ''',
+      [startStr, endStr],
+    );
+
+    return Sqflite.firstIntValue(result) ?? 0;
   }
 }

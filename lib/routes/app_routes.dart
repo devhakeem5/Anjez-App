@@ -4,4 +4,7 @@ abstract class Routes {
   static const addTask = '/add-task';
   static const taskDetails = '/task_details';
   static const settings = '/settings';
+  static const todayTasks = '/today-tasks';
+  static const inProgressTasks = '/in-progress-tasks';
+  static const completedTasks = '/completed-tasks';
 }

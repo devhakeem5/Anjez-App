@@ -166,14 +166,17 @@ class HomeView extends GetView<HomeController> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: controller.todayTasks.length,
             itemBuilder: (context, index) {
+              final task = controller.todayTasks[index];
               return TaskItemWidget(
-                task: controller.todayTasks[index],
+                task: task,
+                subtasks: controller.subtasksMap[task.id] ?? [],
                 onTap: (id) {
                   Get.toNamed(
                     Routes.taskDetails,
                     arguments: id,
                   )?.then((_) => controller.loadTasks());
                 },
+                onSubtaskToggle: controller.toggleSubtaskCompletion,
               );
             },
           );
@@ -207,10 +210,12 @@ class HomeView extends GetView<HomeController> {
                   margin: const EdgeInsets.only(right: 12),
                   child: TaskItemWidget(
                     task: task,
+                    subtasks: controller.subtasksMap[task.id] ?? [],
                     onTap: (id) => Get.toNamed(
                       Routes.taskDetails,
                       arguments: id,
                     )?.then((_) => controller.loadTasks()),
+                    onSubtaskToggle: controller.toggleSubtaskCompletion,
                   ),
                 );
               },
@@ -238,12 +243,15 @@ class HomeView extends GetView<HomeController> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: controller.upcomingTasks.length,
             itemBuilder: (context, index) {
+              final task = controller.upcomingTasks[index];
               return TaskItemWidget(
-                task: controller.upcomingTasks[index],
+                task: task,
+                subtasks: controller.subtasksMap[task.id] ?? [],
                 onTap: (id) => Get.toNamed(
                   Routes.taskDetails,
                   arguments: id,
                 )?.then((_) => controller.loadTasks()),
+                onSubtaskToggle: controller.toggleSubtaskCompletion,
               );
             },
           );

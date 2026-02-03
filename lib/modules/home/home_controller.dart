@@ -3,12 +3,15 @@ import 'package:get/get.dart';
 import '../../core/constants/enums.dart';
 import '../../core/services/storage_service.dart';
 import '../../data/models/category_model.dart';
+import '../../data/models/subtask_model.dart';
 import '../../data/models/task_model.dart';
 import '../../data/repositories/category_repository.dart';
+import '../../data/repositories/subtask_repository.dart';
 import '../../data/repositories/task_repository.dart';
 
 class HomeController extends GetxController {
   final TaskRepository _taskRepository = Get.find<TaskRepository>();
+  final SubTaskRepository _subTaskRepository = Get.find<SubTaskRepository>();
   final StorageService _storageService = Get.find<StorageService>();
 
   final RxString userName = ''.obs;
@@ -18,6 +21,15 @@ class HomeController extends GetxController {
   final RxList<Task> todayTasks = <Task>[].obs;
   final RxList<Task> ongoingTasks = <Task>[].obs;
   final RxList<Task> upcomingTasks = <Task>[].obs;
+
+  // Subtasks Map: taskId -> list of subtasks
+  final RxMap<String, List<Subtask>> subtasksMap = <String, List<Subtask>>{}.obs;
+
+  // Slider Stats
+  final RxInt todayTasksCount = 0.obs;
+  final RxInt inProgressCount = 0.obs;
+  final RxInt completedThisMonthCount = 0.obs;
+  final RxInt completedSubtasksThisMonth = 0.obs;
 
   // Filter State
   final RxString searchText = ''.obs;
@@ -77,10 +89,69 @@ class HomeController extends GetxController {
 
       // Apply cached filters
       filterTasks();
+
+      // Load subtasks for all visible tasks
+      await _loadAllSubtasks();
+
+      // Update Slider Stats
+      await _updateSliderStats();
     } catch (e) {
       print('Error loading tasks: $e');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> _updateSliderStats() async {
+    try {
+      final now = DateTime.now();
+      final startOfMonth = DateTime(now.year, now.month, 1);
+      final endOfMonth = DateTime(now.year, now.month + 1, 0, 23, 59, 59);
+
+      todayTasksCount.value = _originalTodayTasks.length;
+      inProgressCount.value = await _taskRepository.countInProgress();
+      completedThisMonthCount.value = await _taskRepository.countCompletedRange(
+        startOfMonth,
+        endOfMonth,
+      );
+      completedSubtasksThisMonth.value = await _taskRepository.countCompletedSubtasksRange(
+        startOfMonth,
+        endOfMonth,
+      );
+    } catch (e) {
+      print('Error updating slider stats: $e');
+    }
+  }
+
+  Future<void> _loadAllSubtasks() async {
+    final allTaskIds = <dynamic>{
+      ..._originalTodayTasks.map((t) => t.id),
+      ..._originalOngoingTasks.map((t) => t.id),
+      ..._originalUpcomingTasks.map((t) => t.id),
+    };
+
+    for (var taskId in allTaskIds) {
+      final subs = await _subTaskRepository.readByTaskId(taskId);
+      subtasksMap[taskId] = subs;
+    }
+  }
+
+  Future<void> toggleSubtaskCompletion(Subtask subtask) async {
+    try {
+      final updated = subtask.copyWith(isCompleted: !subtask.isCompleted);
+      await _subTaskRepository.update(updated);
+
+      // Update local state
+      final list = subtasksMap[subtask.taskId];
+      if (list != null) {
+        final index = list.indexWhere((s) => s.id == subtask.id);
+        if (index != -1) {
+          list[index] = updated;
+          subtasksMap[subtask.taskId] = List.from(list); // Trigger update
+        }
+      }
+    } catch (e) {
+      print('Error toggling subtask: $e');
     }
   }
 

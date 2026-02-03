@@ -11,6 +11,10 @@ import '../modules/task/controller/add_task_controller.dart';
 import '../modules/task/view/add_task_view.dart';
 import '../modules/task_details/controller/task_details_controller.dart';
 import '../modules/task_details/view/task_details_view.dart';
+import '../modules/task_list/controller/task_list_controller.dart';
+import '../modules/task_list/view/completed_tasks_view.dart';
+import '../modules/task_list/view/in_progress_tasks_view.dart';
+import '../modules/task_list/view/today_tasks_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -49,6 +53,27 @@ class AppPages {
       page: () => const SettingsView(),
       binding: BindingsBuilder(() {
         Get.put(SettingsController());
+      }),
+    ),
+    GetPage(
+      name: Routes.todayTasks,
+      page: () => const TodayTasksView(),
+      binding: BindingsBuilder(() {
+        Get.put(TaskListController());
+      }),
+    ),
+    GetPage(
+      name: Routes.inProgressTasks,
+      page: () => const InProgressTasksView(),
+      binding: BindingsBuilder(() {
+        Get.put(TaskListController());
+      }),
+    ),
+    GetPage(
+      name: Routes.completedTasks,
+      page: () => const CompletedTasksView(),
+      binding: BindingsBuilder(() {
+        Get.put(TaskListController());
       }),
     ),
   ];
